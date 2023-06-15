@@ -23,7 +23,7 @@
  */
 
 #include "fastSLAM.hpp"
-#include "uncertain.h"
+#include "uxhw.h"
 #include <cmath>
 #include <iostream>
 
@@ -103,7 +103,7 @@ static double observationNoiseStandardDeviation = 3.0;
 /*
  *	Random variable used to draw random samples from a uniform distribution.
  */
-static double uniformDistribution = libUncertainDoubleUniformDist(0.0, 1.0);
+static double uniformDistribution = UxHwDoubleUniformDist(0.0, 1.0);
 
 /**
  *	@brief Model of uncertainty in odometry measurements.
@@ -115,7 +115,7 @@ static double uniformDistribution = libUncertainDoubleUniformDist(0.0, 1.0);
 static double
 odometryUncertaintyFunction(double measurement)
 {
-	return libUncertainDoubleGaussDist(measurement, odometryUncertaintyStandardDeviation);
+	return UxHwDoubleGaussDist(measurement, odometryUncertaintyStandardDeviation);
 }
 
 /**
@@ -128,19 +128,19 @@ odometryUncertaintyFunction(double measurement)
 static double
 observationNoiseFunction(double measurand)
 {
-	return libUncertainDoubleGaussDist(measurand, observationNoiseStandardDeviation);
+	return UxHwDoubleGaussDist(measurand, observationNoiseStandardDeviation);
 }
 
 static inline double
 getMean(const double uncertainVariable)
 {
-	return libUncertainDoubleNthMoment(uncertainVariable, kFirstMoment);
+	return UxHwDoubleNthMoment(uncertainVariable, kFirstMoment);
 }
 
 static inline double
 getVariance(const double uncertainVariable)
 {
-	return libUncertainDoubleNthMoment(uncertainVariable, kSecondMoment);
+	return UxHwDoubleNthMoment(uncertainVariable, kSecondMoment);
 }
 
 /**
@@ -199,7 +199,7 @@ updateParticleMap(SLAMParticle & particle, const size_t landmarkID, const double
 	const double prior = particle.map[landmarkID];
 	const double evidence = observationValue + particle.position;
 	const double posterior =
-		libUncertainDoubleBayesLaplace(&observationNoiseFunction, prior, evidence);
+		UxHwDoubleBayesLaplace(&observationNoiseFunction, prior, evidence);
 	return posterior;
 }
 
@@ -246,7 +246,7 @@ averageParticles(SLAMState & state)
 		}
 	}
 
-	state.pose = libUncertainDoubleDistFromSamples(poseVector.data(), poseVector.size());
+	state.pose = UxHwDoubleDistFromSamples(poseVector.data(), poseVector.size());
 
 	for (const auto & landmark : cumulativeMap)
 	{
@@ -350,7 +350,7 @@ resampleParticles(std::vector<SLAMParticle> & particles)
 	for (size_t i = 0; i < particles.size(); i++)
 	{
 		size_t       index;
-		const double sample = libUncertainDoubleSample(uniformDistribution);
+		const double sample = UxHwDoubleSample(uniformDistribution);
 		SLAMParticle resampledParticle;
 
 		auto lower = std::lower_bound(
@@ -391,7 +391,7 @@ SLAMIteration(
 		 *	Update position estimate using odometry.
 		 */
 
-		particle.position += timestep * libUncertainDoubleSample(uncertainOdometryInput);
+		particle.position += timestep * UxHwDoubleSample(uncertainOdometryInput);
 
 		/*
 		 *	Update state estimate based on measurements.
