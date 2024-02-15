@@ -26,6 +26,7 @@
 #include "uxhw.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 typedef enum Constants
 {
@@ -36,7 +37,6 @@ typedef enum Constants
 } Constants;
 
 constexpr double pi = 3.14159265358979323846;
-
 constexpr double zeroInitialiser = 0.0;
 
 /**
