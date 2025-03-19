@@ -1,7 +1,5 @@
 /*
- *	Authored 2022, Greg Brooks.
- *
- *	Copyright (c) 2022, Signaloid.
+ *	Copyright (c) 2022–2025, Signaloid.
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
  *	of this software and associated documentation files (the "Software"), to deal
@@ -28,26 +26,26 @@
 #include <vector>
 
 /**
- *	@brief Particle data structure for the SLAM particle filter.
+ *	@brief	Particle data structure for the SLAM particle filter.
  *
  */
 typedef struct SLAMParticle
 {
-	double weight;
+	double					weight;
 
 	/*
 	 *	Point estimate of robot position.
 	 */
-	double position;
+	double					position;
 
 	/*
 	 *	Uncertain estimates of landmark locations.
 	 */
-	std::unordered_map<size_t, double> map;
+	std::unordered_map<size_t, double>	map;
 } SLAMParticle;
 
 /**
- *	@brief Input measurements for a single timestep.
+ *	@brief	Input measurements for a single timestep.
  *
  */
 typedef struct SLAMMeasurements
@@ -55,43 +53,41 @@ typedef struct SLAMMeasurements
 	/*
 	 *	Odometry input.
 	 */
-	double speed;
+	double					speed;
 
 	/*
 	 *	Measurements of landmark locations.
 	 */
-	std::unordered_map<size_t, double> observations;
+	std::unordered_map<size_t, double>	observations;
 } SLAMMeasurements;
 
 /**
- *	@brief Data structure to group the SLAM output (pose and map estimates) and particle filter
- *	particles.
+ *	@brief	Data structure to group the SLAM output (pose and map estimates) and particle filter particles.
  *
  */
 typedef struct SLAMState
 {
-	double                             pose;
-	std::unordered_map<size_t, double> map;
-	std::vector<SLAMParticle>          particles;
-	double                             odometryStandardDeviation;
-	double                             observationStandardDeviation;
+	double					pose;
+	std::unordered_map<size_t, double>	map;
+	std::vector<SLAMParticle>		particles;
+	double					odometryStandardDeviation;
+	double					observationStandardDeviation;
 
 	SLAMState(
-		const size_t numberOfParticles,
-		const double odometryStandardDeviation,
-		const double observationStandardDeviation);
+		const size_t	numberOfParticles,
+		const double	odometryStandardDeviation,
+		const double	observationStandardDeviation);
 } SLAMState;
 
 /**
- *	@brief Run fastSLAM over the supplied measurement data.
+ *	@brief	Run fastSLAM over the supplied measurement data.
  *
- *	@param state : Reference to SLAMState variables to store SLAM progress and output.
- *	@param measurementsVector : Reference to measurement data input (a time series vector of
- *	measurements).
- *	@param timestep : Time duration between successive measurements.
+ *	@param state			: Reference to SLAMState variables to store SLAM progress and output.
+ *	@param measurementsVector	: Reference to measurement data input (a time series vector of measurements).
+ *	@param timestep			: Time duration between successive measurements.
  */
 void
 fastSLAM(
-	SLAMState &                     state,
-	std::vector<SLAMMeasurements> & measurementsVector,
-	const double                    timestep);
+	SLAMState&			state,
+	std::vector<SLAMMeasurements>&	measurementsVector,
+	const double			timestep);

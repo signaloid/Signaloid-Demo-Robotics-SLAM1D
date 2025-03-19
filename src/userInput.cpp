@@ -1,7 +1,5 @@
 /*
- *	Authored 2022, Greg Brooks.
- *
- *	Copyright (c) 2022, Signaloid.
+ *	Copyright (c) 2022–2025, Signaloid.
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
  *	of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +31,7 @@
 
 typedef enum
 {
-	kIntegerConversionBase = 10,
+	kIntegerConversionBase	= 10,
 } Constants;
 
 class ConversionError : public std::runtime_error
@@ -45,12 +43,12 @@ public:
 };
 
 /**
- *	@brief Print program usage.
+ *	@brief	Print program usage.
  *
- *	@param stream : Stream to print to e.g., stdout, stderr...
+ *	@param stream: Stream to print to e.g., stdout, stderr...
  */
 static void
-printUsage(std::ostream & stream)
+printUsage(std::ostream& stream)
 {
 	stream << "1D SLAM implementation.\n\n"
 		  "	slam-1D [-i file] [-t timestep] [-n number of particles] [-d odometry "
@@ -71,17 +69,17 @@ printUsage(std::ostream & stream)
 		  "	\n"
 		  "	-b observation uncertainty standard deviation: standard deviation of the "
 		  "measurement noise for the robot's landmark observation measurements. (Default: "
-	          "3.0)\n"
+		  "3.0)\n"
 		  "	\n"
 		  "	-h help: display this help message.\n"
 		  "	\n";
 }
 
 static double
-parseDouble(const char * const c)
+parseDouble(const char *  const c)
 {
-	double d;
-	char * pEnd;
+	double	d;
+	char *	pEnd;
 
 	errno = 0;
 
@@ -106,10 +104,10 @@ parseDouble(const char * const c)
 }
 
 static uintmax_t
-parseUintMax(const char * const c, const int base)
+parseUintMax(const char *  const c, const int base)
 {
-	uintmax_t u;
-	char *    pEnd;
+	uintmax_t	u;
+	char *		pEnd;
 
 	errno = 0;
 
@@ -134,18 +132,18 @@ parseUintMax(const char * const c, const int base)
 }
 
 /**
- *	@brief Parse an input data CSV file.
+ *	@brief	Parse an input data CSV file.
  *
- * 	@param parameters : reference to struct to store parsed information.
+ * 	@param parameters: reference to struct to store parsed information.
  */
 static void
-readFromInputFile(UserParameters & parameters)
+readFromInputFile(UserParameters& parameters)
 {
-	std::string line;
+	std::string	line;
 
 	errno = 0;
 
-	std::ifstream fIn(parameters.inputFileName);
+	std::ifstream	fIn(parameters.inputFileName);
 
 	if (!fIn)
 	{
@@ -204,27 +202,28 @@ readFromInputFile(UserParameters & parameters)
 
 		parameters.measurements.push_back(std::move(newMeasurement));
 	}
+
+	return;
 }
 
 UserParameters::UserParameters(
-	const std::string & inputFileName,
-	const double        timestep,
-	const size_t        numberOfParticles,
-	const double        odometryStandardDeviation,
-	const double        observationStandardDeviation)
-	: inputFileName{inputFileName},
-	  timestep{timestep},
-	  numberOfParticles{numberOfParticles},
-	  odometryStandardDeviation{odometryStandardDeviation},
-	  observationStandardDeviation{observationStandardDeviation}
+	const std::string&	inputFileName,
+	const double		timestep,
+	const size_t		numberOfParticles,
+	const double		odometryStandardDeviation,
+	const double		observationStandardDeviation):
+	inputFileName{inputFileName},
+	timestep{timestep},
+	numberOfParticles{numberOfParticles},
+	odometryStandardDeviation{odometryStandardDeviation},
+	observationStandardDeviation{observationStandardDeviation}
 {
 }
 
 int
-getUserParameters(UserParameters & parameters, int argc, char * argv[])
+getUserParameters(UserParameters& parameters, int argc, char *  argv[])
 {
-
-	int opt;
+	int	opt;
 
 	while ((opt = getopt(argc, argv, ":i:t:n:d:b:h")) != -1)
 	{
@@ -238,7 +237,7 @@ getUserParameters(UserParameters & parameters, int argc, char * argv[])
 			{
 				parameters.timestep = parseDouble(optarg);
 			}
-			catch (const ConversionError & e)
+			catch (const ConversionError& e)
 			{
 				throw std::runtime_error(
 					std::string(
@@ -252,11 +251,10 @@ getUserParameters(UserParameters & parameters, int argc, char * argv[])
 				parameters.numberOfParticles =
 					parseUintMax(optarg, kIntegerConversionBase);
 			}
-			catch (const ConversionError & e)
+			catch (const ConversionError& e)
 			{
 				throw std::runtime_error(
-					std::string("Failed to read number of particles from "
-				                    "string: \"") +
+					std::string("Failed to read number of particles from string: \"") +
 					std::string(optarg) + std::string("\"\n"));
 			}
 			break;
@@ -265,11 +263,11 @@ getUserParameters(UserParameters & parameters, int argc, char * argv[])
 			{
 				parameters.odometryStandardDeviation = parseDouble(optarg);
 			}
-			catch (const ConversionError & e)
+			catch (const ConversionError& e)
 			{
 				throw std::runtime_error(
 					std::string("Failed to read odometry uncertainty standard "
-				                    "deviation value from string: \"") +
+							"deviation value from string: \"") +
 					std::string(optarg) + std::string("\"\n"));
 			}
 			break;
@@ -278,11 +276,11 @@ getUserParameters(UserParameters & parameters, int argc, char * argv[])
 			{
 				parameters.observationStandardDeviation = parseDouble(optarg);
 			}
-			catch (const ConversionError & e)
+			catch (const ConversionError& e)
 			{
 				throw std::runtime_error(
 					std::string("Failed to read observation uncertainty "
-				                    "standard deviation value from string: \"") +
+							"standard deviation value from string: \"") +
 					std::string(optarg) + std::string("\"\n"));
 			}
 			break;
@@ -297,5 +295,6 @@ getUserParameters(UserParameters & parameters, int argc, char * argv[])
 	}
 
 	readFromInputFile(parameters);
+
 	return 0;
 }

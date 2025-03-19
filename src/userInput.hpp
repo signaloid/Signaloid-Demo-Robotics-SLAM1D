@@ -1,7 +1,5 @@
 /*
- *	Authored 2022, Greg Brooks.
- *
- *	Copyright (c) 2022, Signaloid.
+ *	Copyright (c) 2022–2024, Signaloid.
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
  *	of this software and associated documentation files (the "Software"), to deal
@@ -30,33 +28,32 @@
 
 /**
  *	@brief Structure to hold user input data.
- *
  */
 typedef struct UserParameters
 {
-	std::string                   inputFileName;
-	std::vector<SLAMMeasurements> measurements;
-	double                        timestep;
-	size_t                        numberOfParticles;
-	double                        odometryStandardDeviation;
-	double                        observationStandardDeviation;
+	std::string			inputFileName;
+	std::vector<SLAMMeasurements>	measurements;
+	double				timestep;
+	size_t				numberOfParticles;
+	double				odometryStandardDeviation;
+	double				observationStandardDeviation;
 
 	UserParameters(
-		const std::string & inputFileName,
-		const double        timestep,
-		const size_t        numberOfParticles,
-		const double        odometryStandardDeviation,
-		const double        observationStandardDeviation);
+		const std::string&	inputFileName,
+		const double		timestep,
+		const size_t		numberOfParticles,
+		const double		odometryStandardDeviation,
+		const double		observationStandardDeviation);
 } UserParameters;
 
 /**
- *	@brief Parse command line inputs.
+ *	@brief	Parse command line inputs.
  *
- *	@param parameters : Reference to location to store user input data.
- *	@param argc : Argument count.
- *	@param argv : Argument vector.
- *	@return int : 1 if program should exit (e.g. user only wanted to see the help message),
- * 	0 if program should continue to run.
+ *	@param parameters	: Reference to location to store user input data.
+ *	@param argc		: Argument count.
+ *	@param argv		: Argument vector.
+ *	@return int		: 1 if program should exit (e.g. user only wanted to see the help message),
+ *				  0 if program should continue to run.
  */
 int
-getUserParameters(UserParameters & parameters, int argc, char * argv[]);
+getUserParameters(UserParameters& parameters, int argc, char *  argv[]);

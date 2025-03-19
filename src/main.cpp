@@ -1,7 +1,5 @@
 /*
- *	Authored 2022, Greg Brooks.
- *
- *	Copyright (c) 2022, Signaloid.
+ *	Copyright (c) 2022–2025, Signaloid.
  *
  *	Permission is hereby granted, free of charge, to any person obtaining a copy
  *	of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +25,13 @@
 #include <iostream>
 
 int
-main(int argc, char * argv[])
+main(int argc, char *  argv[])
 {
-	constexpr char   defaultInputFileName[] = "input.csv";
-	constexpr double defaultTimestep = 0.1;
-	constexpr size_t defaultNumberOfParticles = 50;
-	constexpr double defaultOdometryStandardDeviation = 1.0;
-	constexpr double defaultObservationStandardDeviation = 3.0;
+	constexpr char		defaultInputFileName[] = "input.csv";
+	constexpr double	defaultTimestep = 0.1;
+	constexpr size_t	defaultNumberOfParticles = 50;
+	constexpr double	defaultOdometryStandardDeviation = 1.0;
+	constexpr double	defaultObservationStandardDeviation = 3.0;
 
 	UserParameters parameters(
 		defaultInputFileName,
@@ -53,7 +51,7 @@ main(int argc, char * argv[])
 		parameters.observationStandardDeviation);
 
 	std::cout << "Running " << parameters.measurements.size() << " SLAM iterations with "
-		  << parameters.numberOfParticles << " particles..." << std::endl;
+		<< parameters.numberOfParticles << " particles..." << std::endl;
 
 	fastSLAM(state, parameters.measurements, parameters.timestep);
 
